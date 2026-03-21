@@ -105,7 +105,7 @@ foreach ($phpCandidates as $candidate) {
 
 echo "Używam PHP CLI: {$php}\n\n";
 
-$cd  = "cd " . escapeshellarg($root);
+$cd  = "cd " . escapeshellarg($root) . " && export CI_ENVIRONMENT=production";
 
 // Migracje
 echo "--- php spark migrate ---\n";
