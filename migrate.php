@@ -83,7 +83,28 @@ function runCmd(string $cmd): string
          . "disable_functions: " . ini_get('disable_functions') . "\n";
 }
 
-$php = PHP_BINARY ?: 'php';
+// PHP_BINARY na cPanel wskazuje na php-fpm, szukamy CLI
+$phpCandidates = [
+    // CLI w tym samym drzewie co php-fpm
+    str_replace(['/sbin/php-fpm', '/sbin/php'], '/bin/php', PHP_BINARY),
+    // typowe ścieżki cPanel EA4
+    '/opt/cpanel/ea-php82/root/usr/bin/php',
+    '/opt/cpanel/ea-php81/root/usr/bin/php',
+    '/opt/cpanel/ea-php80/root/usr/bin/php',
+    '/usr/local/bin/php',
+    'php',
+];
+
+$php = 'php';
+foreach ($phpCandidates as $candidate) {
+    if ($candidate && file_exists($candidate) && is_executable($candidate)) {
+        $php = $candidate;
+        break;
+    }
+}
+
+echo "Używam PHP CLI: {$php}\n\n";
+
 $cd  = "cd " . escapeshellarg($root);
 
 // Migracje
