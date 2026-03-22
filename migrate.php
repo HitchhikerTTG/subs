@@ -105,21 +105,23 @@ foreach ($phpCandidates as $candidate) {
 
 echo "Używam PHP CLI: {$php}\n\n";
 
-$cd  = "cd " . escapeshellarg($root) . " && export CI_ENVIRONMENT=production";
+$cd      = "cd " . escapeshellarg($root);
+$phpBin  = escapeshellarg($php);
+$envVars = "CI_ENVIRONMENT=production HOME=/tmp";
 
 // Migracje
 echo "--- php spark migrate ---\n";
-echo runCmd("{$cd} && " . escapeshellarg($php) . " spark migrate --force 2>&1");
+echo runCmd("{$cd} && {$envVars} {$phpBin} spark migrate --force 2>&1");
 echo "\n";
 
 // Seeder
 echo "--- php spark db:seed ServicesSeeder ---\n";
-echo runCmd("{$cd} && " . escapeshellarg($php) . " spark db:seed ServicesSeeder 2>&1");
+echo runCmd("{$cd} && {$envVars} {$phpBin} spark db:seed ServicesSeeder 2>&1");
 echo "\n";
 
 // Status migracji
 echo "--- php spark migrate:status ---\n";
-echo runCmd("{$cd} && " . escapeshellarg($php) . " spark migrate:status 2>&1");
+echo runCmd("{$cd} && {$envVars} {$phpBin} spark migrate:status 2>&1");
 echo "\n";
 
 echo "=== GOTOWE. Usuń teraz plik migrate.php z serwera! ===\n";
