@@ -18,7 +18,7 @@ class Email extends BaseConfig
     /**
      * The mail sending protocol: mail, sendmail, smtp
      */
-    public string $protocol = 'mail';
+    public string $protocol = 'smtp';
 
     /**
      * The server path to Sendmail.
@@ -28,7 +28,7 @@ class Email extends BaseConfig
     /**
      * SMTP Server Hostname
      */
-    public string $SMTPHost = '';
+    public string $SMTPHost = 'smtp.postmarkapp.com';
 
     /**
      * Which SMTP authentication method to use: login, plain
@@ -48,7 +48,7 @@ class Email extends BaseConfig
     /**
      * SMTP Port
      */
-    public int $SMTPPort = 25;
+    public int $SMTPPort = 587;
 
     /**
      * SMTP Timeout (in seconds)
@@ -123,4 +123,24 @@ class Email extends BaseConfig
      * Enable notify message from server
      */
     public bool $DSN = false;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Postmark: SMTPUser i SMTPPass to ten sam Server API Token
+        $token = env('POSTMARK_SERVER_TOKEN', '');
+        if ($token !== '') {
+            $this->SMTPUser  = $token;
+            $this->SMTPPass  = $token;
+        }
+
+        $fromEmail = env('POSTMARK_FROM', '');
+        if ($fromEmail !== '') {
+            $this->fromEmail = $fromEmail;
+        }
+
+        $fromName = env('POSTMARK_FROM_NAME', 'Subskrypcje.pl');
+        $this->fromName = $fromName;
+    }
 }
