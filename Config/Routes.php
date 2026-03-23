@@ -7,6 +7,12 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
+// Migracje przez przeglądarkę (chronione tokenem z .env)
+$routes->get('migrate/(:segment)',          'Migrate::run/$1');
+$routes->get('migrate/(:segment)/seed',     'Migrate::seed/$1');
+$routes->get('migrate/(:segment)/rollback', 'Migrate::rollback/$1');
+$routes->get('migrate/(:segment)/status',   'Migrate::status/$1');
+
 // Kalkulator subskrypcji
 $routes->get('kalkulator',                  'Auth::index');
 $routes->post('kalkulator/login',           'Auth::send');
